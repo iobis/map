@@ -135,8 +135,6 @@ app.controller("mapcontroller", function($scope, $filter, leafcuttermaps, geocod
 	};
 
 	$scope.add = function(lon, lat, name, radius) {
-		lon = $filter("number")(lon, 4);
-		lat = $filter("number")(lat, 4);
 		var marker = L.marker([lat, lon]);
 		leafcuttermaps.getMap("map").then(function(map) {
 			marker.addTo(map.map);
@@ -155,13 +153,6 @@ app.controller("mapcontroller", function($scope, $filter, leafcuttermaps, geocod
 			entry.shoredistance = res[0].shoredistance;
 			entry.depth = res[0].grids.bathymetry;
 		});
-		/*
-		geocodeservice.area("iho", lon, lat).then(function(res) {
-			if (res.length > 0 && res[0].name) {
-				entry.iho = res[0].name;
-			}
-		});
-		*/
 	};
 
 	$scope.plot = function() {
@@ -240,7 +231,7 @@ app.controller("mapcontroller", function($scope, $filter, leafcuttermaps, geocod
 		for (l in layers) {
 			var points = [];
 			for (ll in layers[l]._latlngs) {
-				points.push($filter('number')(layers[l]._latlngs[ll].lng, decimals) + " " + $filter('number')(layers[l]._latlngs[ll].lat, decimals));
+				points.push($filter("number")(layers[l]._latlngs[ll].lng, decimals) + " " + $filter("number")(layers[l]._latlngs[ll].lat, decimals));
 			}
 			lines.push("(" + points.join(", ") + ")");
 		}
@@ -345,7 +336,7 @@ app.controller("mapcontroller", function($scope, $filter, leafcuttermaps, geocod
 			}
 		});
 		map.map.addControl(drawControl);
-		map.map.on('draw:created', function (e) {
+		map.map.on("draw:created", function (e) {
 			if (e.layerType == "polygon") {
 				$scope.addPolygon(e);
 			} else {
@@ -353,16 +344,16 @@ app.controller("mapcontroller", function($scope, $filter, leafcuttermaps, geocod
 			}
 		});
 		map.clicked = 0;
-		map.map.on('click', function(e) {
+		map.map.on("click", function(e) {
 			map.clicked = map.clicked + 1;
 			setTimeout(function() {
 				if (map.clicked == 1) {
 					$scope.$apply(function() {
-						$scope.add($filter('number')(e.latlng.lng, 4), $filter('number')(e.latlng.lat, 4));
+						$scope.add(e.latlng.lng, e.latlng.lat);
 					});
 				}
 				map.clicked = 0;
-			}, 300);
+			}, 200);
 		});
 	});
 
