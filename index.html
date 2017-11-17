@@ -63,14 +63,16 @@
 			                <th>Name</th>
 			                <th>Longitude</th>
 			                <th>Latitude</th>
+			                <th>Uncertainty</th>
 			            </tr>
 		            </thead>
 		            <tbody>
-		            <tr class="point" ng-repeat="g in gazetteer" ng-click="add(g.longitude, g.latitude, g.preferredGazetteerName)">
+		            <tr class="point" ng-repeat="g in gazetteer" ng-click="add(g.longitude, g.latitude, g.preferredGazetteerName, g.precision)">
 		                <td>{{g.placeType}}</td>
 		                <td>{{g.preferredGazetteerName}}</td>
 		                <td>{{g.longitude | number : 4}}</td>
 		                <td>{{g.latitude | number : 4}}</td>
+		                <td>{{g.precision | number : 0}}</td>
 		            </tr>
 		            <tr ng-if="!(gazetteer.length > 0) && !loading"><td class="loading">No results</td></tr>
 		            <tr ng-if="loading"><td class="loading">Loading...</td></tr>
@@ -92,7 +94,8 @@
 			                <th>Radius</th>
 			                <th>Name</th>
 			                <th>EEZ</th>
-			                <th>IHO</th>
+			                <th>Shoredistance</th>
+			                <th>Depth</th>
 			                <th></th>
 			            </tr>
 		            </thead>
@@ -108,7 +111,8 @@
 		                <td>{{l.radius | number: 0}}</td>
 		                <td>{{l.name}}</td>
 		                <td>{{l.eez}}</td>
-		                <td>{{l.iho}}</td>
+		                <td>{{l.shoredistance | number:0}}</td>
+		                <td>{{l.depth | number:0 }}</td>
 		                <td><a href="#" ng-click="del(l)"><span class="glyphicon glyphicon-remove"></span></a></td>
 		            </tr>
 		            <tr ng-if="!(locations.length > 0)"><td class="loading">No locations</td></tr>

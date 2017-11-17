@@ -1,6 +1,6 @@
 new Clipboard("#copybutton");
 
-var app = angular.module("app", ['leafcutter']);
+var app = angular.module("app", ["leafcutter"]);
 
 var trunc = function(x) {
 	if (x > 0) {
@@ -10,13 +10,13 @@ var trunc = function(x) {
 	}
 };
 
-app.service('geocodeservice', function($q, $http, $rootScope) {
+app.service("geocodeservice", function($q, $http, $rootScope) {
     this.gazetteer = function(q) {
         var url = "http://www.marineregions.org/rest/getGazetteerRecordsByName.json/" + q + "/true/false/?callback=?";
         var deferred = $q.defer();
         var ajax = $.ajax({
             url: url,
-            dataType: 'json',
+            dataType: "json",
             success: function (response) {
                 deferred.resolve(response);
             }, error: function() {
@@ -30,7 +30,21 @@ app.service('geocodeservice', function($q, $http, $rootScope) {
         var deferred = $q.defer();
         var ajax = $.ajax({
             url: url,
-            dataType: 'json',
+            dataType: "json",
+            success: function (response) {
+                deferred.resolve(response);
+            }, error: function() {
+            	deferred.resolve({});
+            }
+        });
+        return deferred.promise;
+    };
+    this.xy = function(lon, lat) {
+    	var url = "http://api.iobis.org/xylookup?x=" + lon + "&y=" + lat;
+        var deferred = $q.defer();
+        var ajax = $.ajax({
+            url: url,
+            dataType: "json",
             success: function (response) {
                 deferred.resolve(response);
             }, error: function() {
@@ -41,12 +55,12 @@ app.service('geocodeservice', function($q, $http, $rootScope) {
     };
 });
 
-app.directive('ngEnter', function() {
+app.directive("ngEnter", function() {
     return function(scope, element, attrs) {
         element.bind("keydown keypress", function(event) {
             if(event.which === 13) {
                 scope.$apply(function(){
-                        scope.$eval(attrs.ngEnter);
+					scope.$eval(attrs.ngEnter);
                 });
                 event.preventDefault();
             }
@@ -75,7 +89,7 @@ app.controller("mapcontroller", function($scope, $filter, leafcuttermaps, geocod
 	$scope.getwkt = function() {
 		$scope.w = "";
 		$scope.w = wkt();
-		$('#modal').modal();
+		$("#modal").modal();
 	};
 
 	$scope.geocode = function() {
@@ -120,14 +134,14 @@ app.controller("mapcontroller", function($scope, $filter, leafcuttermaps, geocod
 		});
 	};
 
-	$scope.add = function(lon, lat, name) {
-		lon = $filter('number')(lon, 4);
-		lat = $filter('number')(lat, 4);
+	$scope.add = function(lon, lat, name, radius) {
+		lon = $filter("number")(lon, 4);
+		lat = $filter("number")(lat, 4);
 		var marker = L.marker([lat, lon]);
 		leafcuttermaps.getMap("map").then(function(map) {
 			marker.addTo(map.map);
 		});
-		var entry = {lon: lon, lat: lat, marker: marker, type: "point"};
+		var entry = {lon: lon, lat: lat, marker: marker, type: "point", radius: radius};
 		if (name !== undefined) {
 			entry.name = name;
 		}
@@ -137,11 +151,17 @@ app.controller("mapcontroller", function($scope, $filter, leafcuttermaps, geocod
 				entry.eez = res[0].name;
 			}
 		});
+		geocodeservice.xy(lon, lat).then(function(res) {
+			entry.shoredistance = res[0].shoredistance;
+			entry.depth = res[0].grids.bathymetry;
+		});
+		/*
 		geocodeservice.area("iho", lon, lat).then(function(res) {
 			if (res.length > 0 && res[0].name) {
 				entry.iho = res[0].name;
 			}
 		});
+		*/
 	};
 
 	$scope.plot = function() {
