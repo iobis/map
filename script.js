@@ -105,8 +105,8 @@ app.controller("mapcontroller", function($scope, $filter, leafcuttermaps, geocod
 	$scope.toggleeez = function() {
 		leafcuttermaps.getMap("map").then(function(map) {
 			if ($scope.eez == null) {
-				$scope.eez = L.tileLayer.wms("http://iobis.org/geoserver/OBIS/wms?service=WMS&version=1.1.0&request=GetMap&layers=OBIS:eezs&styles=&srs=EPSG:4326", {
-					layers: 'OBIS:eezs',
+				$scope.eez = L.tileLayer.wms("https://geo.vliz.be/geoserver/gwc/service/wms?service=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&SRS=EPSG:3857", {
+					layers: 'MarineRegions:eez_boundaries',
 					format: 'image/png',
 					transparent: true
 				});
@@ -114,22 +114,6 @@ app.controller("mapcontroller", function($scope, $filter, leafcuttermaps, geocod
 			} else {
 				map.map.removeLayer($scope.eez);
 				$scope.eez = null;
-			}
-		});
-	};
-
-	$scope.toggleiho = function() {
-		leafcuttermaps.getMap("map").then(function(map) {
-			if ($scope.iho == null) {
-				$scope.iho = L.tileLayer.wms("http://iobis.org/geoserver/OBIS/wms?service=WMS&version=1.1.0&request=GetMap&layers=OBIS:eezs&styles=&srs=EPSG:4326", {
-					layers: 'OBIS:iho',
-					format: 'image/png',
-					transparent: true
-				});
-				$scope.iho.addTo(map.map);
-			} else {
-				map.map.removeLayer($scope.iho);
-				$scope.iho = null;
 			}
 		});
 	};
@@ -144,11 +128,13 @@ app.controller("mapcontroller", function($scope, $filter, leafcuttermaps, geocod
 			entry.name = name;
 		}
 		$scope.locations.push(entry);
+		/*
 		geocodeservice.area("eez", lon, lat).then(function(res) {
 			if (res.length > 0 && res[0].name) {
 				entry.eez = res[0].name;
 			}
 		});
+		 */
 		geocodeservice.xy(lon, lat).then(function(res) {
 			entry.shoredistance = res[0].shoredistance;
 			entry.depth = res[0].grids.bathymetry;
