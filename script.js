@@ -26,7 +26,7 @@ app.service("geocodeservice", function($q, $http, $rootScope) {
         return deferred.promise;
     };
     this.area = function(layer, lon, lat) {
-    	var url = "http://api.iobis.org/features?layer=" + layer + "&longitude=" + lon + "&latitude=" + lat;
+    	var url = "https://api.iobis.org/features?layer=" + layer + "&longitude=" + lon + "&latitude=" + lat;
         var deferred = $q.defer();
         var ajax = $.ajax({
             url: url,
@@ -40,7 +40,7 @@ app.service("geocodeservice", function($q, $http, $rootScope) {
         return deferred.promise;
     };
     this.xy = function(lon, lat) {
-    	var url = "http://api.iobis.org/xylookup?x=" + lon + "&y=" + lat;
+    	var url = "https://api.iobis.org/xylookup?x=" + lon + "&y=" + lat;
         var deferred = $q.defer();
         var ajax = $.ajax({
             url: url,
