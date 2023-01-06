@@ -17,11 +17,11 @@
 <div id="wrapper" class="container" ng-cloak>
 
 		<div class="col-md-6">
+
 			<h4>Layers</h4>
-			<p>Switch layers on or off.</p>
+			<p>Switch layers on or off. Layers from <a href="https://www.marineregions.org/" target="_blank">Marine Regions</a>.</p>
 			<div class="input-group">
-				<button type="button" id="eezbutton" class="btn btn-default" ng-click="toggleeez()">EEZ</button>&nbsp;
-				<button type="button" id="eezbutton" class="btn btn-default" ng-click="toggleiho()">IHO</button>
+				<button type="button" id="eezbutton" class="btn btn-default" ng-click="toggleeez()">EEZ boundaries</button>&nbsp;
 			</div>
 		</div>
 
@@ -35,7 +35,7 @@
 
 		<div class="col-md-12">
 			<h4>Coordinates</h4>
-			<p>Add a location using decimal longitude and latitude.</p>
+			<p>Add a location using decimal longitude and latitude (space or comma separated).</p>
 			<div class="input-group">
 				<input class="form-control" id="searchfield" ng-enter="plot()" ng-model="coord" placeholder="Enter coordinates">
 				<span class="input-group-btn">
@@ -46,7 +46,7 @@
 
 		<div class="col-md-12">
 			<h4>Geocoding</h4>
-			<p>Find locations by name and add them to the locations list.</p>
+			<p>Find locations by name and add them to the locations list. Geocoding by <a href="https://www.marineregions.org/" target="_blank">Marine Regions</a>.</p>
 			<div class="input-group">
 				<input class="form-control" id="coding" ng-enter="geocode()" ng-model="input" placeholder="Enter location name">
 				<span class="input-group-btn">
@@ -63,7 +63,7 @@
 			                <th>Name</th>
 			                <th>Longitude</th>
 			                <th>Latitude</th>
-			                <th>Uncertainty</th>
+			                <th>Uncertainty (m)</th>
 			            </tr>
 		            </thead>
 		            <tbody>
@@ -91,11 +91,10 @@
 			            	<th></th>
 			                <th>Longitude</th>
 			                <th>Latitude</th>
-			                <th>Radius</th>
+			                <th>Radius (m)</th>
 			                <th>Name</th>
-			                <th>EEZ</th>
-			                <th>Shoredistance</th>
-			                <th>Depth</th>
+			                <th>Shore distance (m)</th>
+			                <th>Depth (m)</th>
 			                <th></th>
 			            </tr>
 		            </thead>
@@ -110,12 +109,11 @@
 		                <td>{{l.lat | number: 4}}</td>
 		                <td>{{l.radius | number: 0}}</td>
 		                <td>{{l.name}}</td>
-		                <td>{{l.eez}}</td>
 		                <td>{{l.shoredistance | number:0}}</td>
 		                <td>{{l.depth | number:0 }}</td>
 		                <td><a href="#" ng-click="del(l)"><span class="glyphicon glyphicon-remove"></span></a></td>
 		            </tr>
-		            <tr ng-if="!(locations.length > 0)"><td class="loading">No locations</td></tr>
+		            <tr ng-if="!(locations.length > 0)"><td></td><td class="loading">No locations</td></tr>
 		            </tbody>
 	            </table>
             </p>
